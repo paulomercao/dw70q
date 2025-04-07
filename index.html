@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuestionario Data Warehouse</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
+    .question { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .correct { color: green; font-weight: bold; }
+    .incorrect { color: red; font-weight: bold; }
+    .option { cursor: pointer; padding: 5px; display: block; }
+    .option:hover { background: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Cuestionario de Data Warehouse</h1>
+  <div id="quiz"></div>
+  <script>
+    const questions = [
+      { q: "¿Cuál de las siguientes NO es una característica de un Data Warehouse según Bill Inmon?", options: ["Integrado", "Histórico", "Volátil", "Orientado a temas"], answer: 2 },
+      { q: "¿Qué describe mejor el modelo propuesto por Kimball?", options: ["Top-Down con DW central", "Solo usa datos estructurados", "Bottom-Up con Data Marts", "No usa ETL"], answer: 2 },
+      { q: "¿Qué función cumple el proceso ETL?", options: ["Analizar datos", "Actualizar bases de datos", "Extraer, Transformar y Cargar", "Almacenar datos brutos"], answer: 2 },
+      { q: "¿Qué es un Data Mart?", options: ["Repositorio general de toda la empresa", "Área temporal de staging", "Subsistema de datos para un área específica", "Sistema OLTP"], answer: 2 },
+      { q: "¿Cuál es el objetivo principal del Data Mining?", options: ["Guardar registros históricos", "Controlar accesos", "Descubrir patrones en los datos", "Migrar información"], answer: 2 },
+      { q: "¿Qué modelo de diseño de DW es propuesto por Inmon?", options: ["Bottom-Up", "Top-Down", "Ágil", "HEFESTO"], answer: 1 },
+      { q: "¿Qué herramienta permite análisis OLAP en Microsoft?", options: ["PolyBase", "Power BI", "Cortana", "Excel Services"], answer: 1 },
+      { q: "¿Qué tipo de dato representa un archivo XML?", options: ["Estructurado", "No estructurado", "Semiestructurado", "Crudo"], answer: 2 },
+      { q: "¿Qué es la granularidad en un DW?", options: ["Tamaño del disco", "Nivel de detalle de los datos", "Velocidad de consulta", "Longitud del nombre del campo"], answer: 1 },
+      { q: "¿Cuál es la arquitectura usada por Microsoft APS?", options: ["SMP", "MPP", "OLTP", "OLAP"], answer: 1 },
+      { q: "¿Qué almacena un ODS?", options: ["Datos analíticos históricos", "Datos operacionales integrados casi en tiempo real", "Datos no estructurados", "Resultados de minería"], answer: 1 },
+      { q: "¿Qué permite PolyBase?", options: ["Actualizar sistemas OLTP", "Leer datos de Hadoop desde SQL", "Comprimir columnas", "Ejecutar scripts Python"], answer: 1 },
+      { q: "¿Cuál es una ventaja de los Data Marts?", options: ["Procesan datos no estructurados", "Permiten consultas más rápidas por área", "Sustituyen el DW central", "No requieren ETL"], answer: 1 },
+      { q: "¿Qué herramienta se usa para Big Data en Azure?", options: ["Data Studio", "Data Lake", "Access", "SQL Server"], answer: 1 },
+      { q: "¿Cuál es el nombre del índice que mejora rendimiento en DW modernos?", options: ["B-Tree", "Columnstore", "Bitmap", "Hash"], answer: 1 },
+      { q: "¿Qué metodología se enfoca en entregas incrementales?", options: ["Inmon", "DWEP", "Kimball", "HEFESTO"], answer: 2 },
+      { q: "¿Qué es OLTP?", options: ["Sistema de consulta multidimensional", "Sistema de transacciones operativas diarias", "Almacenamiento de datos en memoria", "Sistema de análisis predictivo"], answer: 1 },
+      { q: "¿Cuál es un tipo de dato crudo?", options: ["Ventas agregadas", "Datos JSON normalizados", "Logs sin procesar", "Tablas de resumen"], answer: 2 },
+      { q: "¿Qué motor de almacenamiento usa SQL Server para consultas rápidas?", options: ["In-Memory Columnstore", "Heap", "Indexed View", "Blob"], answer: 0 },
+      { q: "¿Qué define la madurez del dato 'Trusted'?", options: ["Dato original sin procesar", "Dato con reglas aplicadas", "Dato validado y listo para análisis", "Dato externo aún sin integrar"], answer: 2 },
+      { q: "¿Qué ventaja tiene Azure SQL Data Warehouse?", options: ["Soporte solo local", "Costo fijo mensual", "Escalabilidad instantánea", "Solo datos relacionales"], answer: 2 },
+      { q: "¿Qué se utiliza en Data Mining?", options: ["ETL", "Predicciones y modelos", "Transacciones", "Normalization"], answer: 1 },
+      { q: "¿Qué permite OLAP?", options: ["Cargar datos desde Excel", "Análisis multidimensional", "Enviar alertas por correo", "Validar credenciales"], answer: 1 },
+      { q: "¿Qué tipo de archivo se usa en Data Lake?", options: ["Solo .csv", "Solo .xml", "Cualquier tipo de dato", "Solo datos históricos"], answer: 2 },
+      { q: "¿Qué es un Data Lake?", options: ["DW departamental", "Almacén de datos sin transformar", "Repositorio de reportes", "Vista de negocio"], answer: 1 },
+      { q: "¿Qué es una tabla de hechos?", options: ["Describe atributos", "Contiene métricas del negocio", "Es usada para seguridad", "Contiene código fuente"], answer: 1 },
+      { q: "¿Qué modelo se basa en Snowflake?", options: ["DWEP", "HEFESTO", "Esquema normalizado de dimensiones", "ETL"], answer: 2 },
+      { q: "¿Qué representa la sigla OLAP?", options: ["Online Load and Access Protocol", "Operational Linear Access Panel", "Online Analytical Processing", "Only Local Analytical Platform"], answer: 2 },
+      { q: "¿Qué tipo de análisis permite Cortana Intelligence?", options: ["Solamente reportes", "Solo base de datos local", "Machine Learning avanzado", "Diseño de interfaces"], answer: 2 },
+      { q: "¿Qué es Azure HDInsight?", options: ["Base de datos relacional", "Solución Hadoop en la nube", "Visualizador de datos", "Lenguaje de consulta"], answer: 1 },
+      { q: "¿Qué representa una tabla de dimensiones?", options: ["Relaciones entre claves", "Códigos de seguridad", "Atributos descriptivos de los datos", "Modelos de red"], answer: 2 },
+      { q: "¿Qué permite la arquitectura MPP?", options: ["Mejorar almacenamiento físico", "Escalar horizontalmente el DW", "Actualizar metadatos", "Comprimir tablas de hechos"], answer: 1 },
+      { q: "¿Qué representa la columna 'answer' en el cuestionario?", options: ["Índice de respuesta correcta", "Respuesta textual", "Clave primaria", "Pregunta oculta"], answer: 0 },
+      { q: "¿Qué hace la función PolyBase?", options: ["Carga visualizaciones", "Traduce XML a JSON", "Permite consultas unificadas entre SQL y Hadoop", "Convierte datos a PDF"], answer: 2 },
+      { q: "¿Qué servicio permite suspender y reanudar computación?", options: ["Power BI", "Excel", "Azure SQL Data Warehouse", "PolyBase"], answer: 2 },
+      { q: "¿Qué representa el modelo Top-Down?", options: ["Comienza con Data Marts", "Construye un DW general primero", "Usa tablas planas", "Es compatible con solo OLTP"], answer: 1 },
+      { q: "¿Qué datos contiene un sistema OLTP?", options: ["Agregados históricos", "Predicciones", "Transacciones del día a día", "Datos minados"], answer: 2 },
+      { q: "¿Cuál es una etapa del proceso ETL?", options: ["Clasificación", "Transformación", "Minería", "Visualización"], answer: 1 },
+      { q: "¿Qué significa Data Warehousing?", options: ["Transformación visual", "Proceso para construir y explotar un DW", "Transmisión segura de datos", "Generación de archivos planos"], answer: 1 },
+      { q: "¿Qué permite el Columnstore Index?", options: ["Menor velocidad de consulta", "Lectura optimizada de columnas", "Actualizar todas las filas", "Agrupar metadatos"], answer: 1 },
+      { q: "¿Qué enfoque educativo existe para construir DW?", options: ["HEFESTO", "INFORMIX", "DATAX", "VISUAL"], answer: 0 },
+      { q: "¿Qué significa U-SQL?", options: ["Una variante de SQL para Hadoop", "Lenguaje no relacional", "Sistema gráfico", "Extensión para Java"], answer: 0 },
+      { q: "¿Qué datos se pueden almacenar en un Data Lake?", options: ["Solo números", "Solo imágenes", "Cualquier tipo de datos", "Solo Excel"], answer: 2 },
+      { q: "¿Qué significa DSS?", options: ["Decision Support System", "Data Smart Server", "Dynamic Storage System", "Direct SQL Store"], answer: 0 },
+      { q: "¿Cuál es un sistema OLAP?", options: ["PowerPoint", "Excel PivotTable", "Outlook", "Access"], answer: 1 },
+      { q: "¿Qué es la arquitectura CIF?", options: ["Factory de datos personales", "Modelo propuesto por Inmon", "Interfaz gráfica del DW", "Sistema de seguridad"], answer: 1 },
+      { q: "¿Qué es un MDDB?", options: ["Base de datos de transacciones", "Base de datos relacional", "Base de datos multidimensional", "Sistema de respaldo"], answer: 2 },
+      { q: "¿Qué representa un dato atómico?", options: ["Dato complejo", "Dato agregado", "Dato en su forma más descompuesta", "Dato innecesario"], answer: 2 },
+      { q: "¿Qué tipo de granularidad permite análisis más detallado?", options: ["Alta", "Media", "Baja", "Redundante"], answer: 0 },
+      { q: "¿Qué componente sirve de paso intermedio antes del DW?", options: ["ODS", "ETL", "BI", "DM"], answer: 0 },
+      { q: "¿Qué permite un modelo de copo de nieve?", options: ["Datos en formato no estructurado", "Datos desnormalizados", "Dimensiones normalizadas", "Transformaciones OLTP"], answer: 2 },
+      { q: "¿Qué enfoque educativo se utiliza en entornos académicos?", options: ["DWEP", "HEFESTO", "Inmon", "Kimball"], answer: 1 },
+      { q: "¿Qué caracteriza el nivel Trusted de madurez del dato?", options: ["Sin limpieza", "Datos agregados", "Listos para análisis", "Datos fuera del DW"], answer: 2 },
+      { q: "¿Qué es una consulta ad hoc?", options: ["Predefinida", "Automática", "Abierta y libre", "No estructurada"], answer: 2 },
+      { q: "¿Qué ventaja ofrece un DW a una organización?", options: ["Duplicación de datos", "Más archivos planos", "Consulta centralizada", "Mayor complejidad de datos"], answer: 2 },
+      { q: "¿Qué tipo de dato es un video?", options: ["Estructurado", "No estructurado", "Semiestructurado", "Indexado"], answer: 1 },
+      { q: "¿Cuál es el objetivo de un Data Warehouse?", options: ["Procesamiento de transacciones", "Almacenamiento de logs", "Análisis y toma de decisiones", "Desarrollo de software"], answer: 2 },
+      { q: "¿Qué tipo de herramienta es BI?", options: ["De minería de texto", "De respaldo", "De análisis y soporte a decisiones", "De producción"], answer: 2 },
+      { q: "¿Qué es el KDD?", options: ["Herramienta OLAP", "Proceso de descubrimiento de conocimiento", "Tipo de consulta SQL", "Tipo de dato no estructurado"], answer: 1 },
+      { q: "¿Qué tipo de modelo usa cubos multidimensionales?", options: ["OLTP", "ETL", "OLAP", "CRM"], answer: 2 },
+      { q: "¿Cuál es una ventaja del modelo estrella?", options: ["Normalización compleja", "Rendimiento bajo", "Simplicidad de consultas", "Alto nivel de redundancia"], answer: 2 },
+      { q: "¿Qué define una base de datos no volátil?", options: ["Permite edición constante", "Solo escritura y lectura", "Se actualiza automáticamente", "No permite cargas nuevas"], answer: 1 },
+      { q: "¿Qué fase sigue después de la transformación en ETL?", options: ["Carga", "Extracción", "Visualización", "Normalización"], answer: 0 },
+      { q: "¿Qué enfoque metodológico es ágil e iterativo?", options: ["Inmon", "DWEP", "Kimball", "RWM"], answer: 3 },
+      { q: "¿Cuál es una característica clave del DW?", options: ["Actualización permanente", "Alta velocidad de escritura", "Datos históricos y estables", "Datos dispersos"], answer: 2 },
+      { q: "¿Qué estructura lógica facilita el análisis en DW?", options: ["Modelo entidad-relación", "Modelo estrella o copo de nieve", "Modelo jerárquico", "Modelo objeto-relacional"], answer: 1 }
+    ];
+
+    const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
+    const quizDiv = document.getElementById("quiz");
+
+    shuffled.forEach((item, i) => {
+      const qDiv = document.createElement("div");
+      qDiv.className = "question";
+      const qText = document.createElement("p");
+      qText.textContent = `${i + 1}. ${item.q}`;
+      qDiv.appendChild(qText);
+      item.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.className = "option";
+        btn.onclick = () => {
+          if (btn.dataset.clicked) return;
+          btn.dataset.clicked = true;
+          if (idx === item.answer) {
+            btn.classList.add("correct");
+            btn.textContent += " ✓ Correcto";
+          } else {
+            btn.classList.add("incorrect");
+            btn.textContent += " ✗ Incorrecto";
+          }
+        };
+        qDiv.appendChild(btn);
+      });
+      quizDiv.appendChild(qDiv);
+    });
+  </script>
+</body>
+</html>
